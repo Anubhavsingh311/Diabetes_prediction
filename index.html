@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- figma:head-start -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GlycoSense — Diabetes Risk Prediction</title>
+    <!-- figma:head-end -->
+    <meta
+      name="description"
+      content="A machine learning-based assessment tool that estimates the likelihood of diabetes from eight health indicators. Educational use only."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+  </head>
+  <body>
+    <!-- figma:body-start -->
+    <a class="skip-link" href="#assessment">Skip to assessment</a>
+
+    <!-- ================= NAVIGATION ================= -->
+    <header class="nav" id="top">
+      <div class="container nav__inner">
+        <a href="#top" class="brand" aria-label="GlycoSense home">
+          <span class="brand__mark" aria-hidden="true"><i data-lucide="droplet"></i></span>
+          <span class="brand__name">GlycoSense</span>
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <a href="#overview">Overview</a>
+          <a href="#assessment">Assessment</a>
+          <a href="#results">Results</a>
+          <a href="#model">Model</a>
+        </nav>
+        <div class="nav__actions">
+          <span class="api-status" id="apiStatus" data-state="checking" role="status" aria-live="polite">
+            <span class="api-status__dot" aria-hidden="true"></span>
+            <span class="api-status__label">Checking API</span>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ================= HERO ================= -->
+      <section class="hero">
+        <div class="container hero__grid">
+          <div class="hero__copy">
+            <p class="eyebrow"><span class="eyebrow__dot"></span>ML-based risk screening</p>
+            <h1 class="hero__title">Understand Your Diabetes Risk. <span>Take Control of Your Health.</span></h1>
+            <p class="hero__lead">
+              An intelligent machine learning-based assessment tool that analyzes health indicators to estimate the
+              likelihood of diabetes.
+            </p>
+            <div class="hero__cta">
+              <a href="#assessment" class="btn btn--primary btn--lg">
+                Start Assessment <i data-lucide="arrow-right"></i>
+              </a>
+              <a href="#model" class="btn btn--ghost btn--lg">Learn More</a>
+            </div>
+            <p class="hero__note">
+              <i data-lucide="info"></i>
+              Provides a statistical estimate, not a diagnosis.
+            </p>
+          </div>
+
+          <!-- Healthcare illustration (decorative) -->
+          <div class="hero__art" aria-hidden="true">
+            <svg viewBox="0 0 520 460" class="illus" role="presentation">
+              <defs>
+                <linearGradient id="gArea" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="var(--brand)" stop-opacity=".22" />
+                  <stop offset="100%" stop-color="var(--brand)" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <!-- main panel -->
+              <rect x="40" y="40" width="400" height="300" rx="22" class="il-panel" />
+              <rect x="64" y="66" width="120" height="10" rx="5" class="il-line-strong" />
+              <rect x="64" y="86" width="74" height="8" rx="4" class="il-line" />
+              <!-- grid -->
+              <g class="il-grid">
+                <line x1="64" x2="416" y1="140" y2="140" />
+                <line x1="64" x2="416" y1="190" y2="190" />
+                <line x1="64" x2="416" y1="240" y2="240" />
+                <line x1="64" x2="416" y1="290" y2="290" />
+              </g>
+              <!-- threshold line -->
+              <line x1="64" x2="416" y1="205" y2="205" class="il-threshold" />
+              <!-- curve -->
+              <path
+                d="M64 270 C 110 262, 130 240, 170 246 S 230 196, 270 210 S 330 160, 370 170 S 400 150, 416 146 L416 300 L64 300 Z"
+                fill="url(#gArea)"
+              />
+              <path
+                d="M64 270 C 110 262, 130 240, 170 246 S 230 196, 270 210 S 330 160, 370 170 S 400 150, 416 146"
+                class="il-curve"
+              />
+              <circle cx="270" cy="210" r="6" class="il-point" />
+              <circle cx="270" cy="210" r="14" class="il-point-halo" />
+              <!-- floating card: drop -->
+              <g transform="translate(330 270)">
+                <rect width="160" height="132" rx="20" class="il-card" />
+                <circle cx="40" cy="44" r="22" class="il-badge" />
+                <path d="M40 30 C 48 40, 52 46, 52 51 a12 12 0 0 1 -24 0 C 28 46, 32 40, 40 30Z" class="il-drop" />
+                <rect x="74" y="34" width="62" height="8" rx="4" class="il-line-strong" />
+                <rect x="74" y="50" width="40" height="6" rx="3" class="il-line" />
+                <rect x="20" y="86" width="120" height="8" rx="4" class="il-track" />
+                <rect x="20" y="86" width="72" height="8" rx="4" class="il-fill" />
+                <rect x="20" y="104" width="80" height="6" rx="3" class="il-line" />
+              </g>
+              <!-- floating card: pulse -->
+              <g transform="translate(0 300)">
+                <rect width="178" height="96" rx="20" class="il-card" />
+                <path d="M18 54 h30 l10 -22 l14 42 l12 -30 l8 10 h68" class="il-pulse" />
+                <rect x="18" y="18" width="70" height="8" rx="4" class="il-line-strong" />
+              </g>
+              <!-- plus -->
+              <g transform="translate(456 70)" class="il-plus">
+                <rect x="-5" y="-16" width="10" height="32" rx="3" />
+                <rect x="-16" y="-5" width="32" height="10" rx="3" />
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= OVERVIEW ================= -->
+      <section class="section" id="overview" aria-labelledby="overviewTitle">
+        <div class="container">
+          <h2 class="visually-hidden" id="overviewTitle">Overview</h2>
+          <div class="overview">
+            <article class="stat-card">
+              <span class="stat-card__icon"><i data-lucide="stethoscope"></i></span>
+              <h3>Diabetes Prediction Tool</h3>
+              <p>Estimates the likelihood of diabetes from routine health indicators.</p>
+            </article>
+            <article class="stat-card">
+              <span class="stat-card__icon"><i data-lucide="cpu"></i></span>
+              <h3>Machine Learning Powered</h3>
+              <p>A Gradient Boosting Classifier trained on clinical health records.</p>
+            </article>
+            <article class="stat-card">
+              <span class="stat-card__icon"><i data-lucide="list-checks"></i></span>
+              <h3><span class="mono">8</span> Health Input Features</h3>
+              <p>Demographics, medical history and three key health measurements.</p>
+            </article>
+            <article class="stat-card">
+              <span class="stat-card__icon"><i data-lucide="zap"></i></span>
+              <h3>Instant Prediction Results</h3>
+              <p>Probability and classification returned live by the deployed model.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ASSESSMENT ================= -->
+      <section class="section section--tint" id="assessment" aria-labelledby="assessTitle">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Step 1</p>
+            <h2 id="assessTitle">Health assessment</h2>
+            <p>Fill in all eight indicators. Values are sent only to the prediction API and are not stored.</p>
+          </div>
+
+          <div class="assess-grid">
+            <form class="card form" id="assessmentForm" novalidate>
+              <!-- Personal information -->
+              <fieldset class="form-group">
+                <legend class="form-group__title">
+                  <span class="form-group__num">01</span>Personal information
+                </legend>
+                <div class="form-row">
+                  <div class="field" data-field="gender">
+                    <span class="field__label" id="genderLabel">Gender</span>
+                    <div class="segmented" role="radiogroup" aria-labelledby="genderLabel">
+                      <label><input type="radio" name="gender" value="Male" /><span>Male</span></label>
+                      <label><input type="radio" name="gender" value="Female" /><span>Female</span></label>
+                      <label><input type="radio" name="gender" value="Other" /><span>Other</span></label>
+                    </div>
+                    <p class="field__error" id="gender-error" aria-live="polite"></p>
+                  </div>
+                  <div class="field" data-field="age">
+                    <label class="field__label" for="age">Age</label>
+                    <div class="input-unit">
+                      <input
+                        type="number"
+                        id="age"
+                        name="age"
+                        inputmode="decimal"
+                        min="0"
+                        max="120"
+                        step="any"
+                        placeholder="e.g. 45"
+                        aria-describedby="age-help age-error"
+                      />
+                      <span class="input-unit__unit">years</span>
+                    </div>
+                    <p class="field__help" id="age-help">Between 0 and 120.</p>
+                    <p class="field__error" id="age-error" aria-live="polite"></p>
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- Medical history -->
+              <fieldset class="form-group">
+                <legend class="form-group__title"><span class="form-group__num">02</span>Medical history</legend>
+                <div class="form-row">
+                  <div class="field" data-field="hypertension">
+                    <span class="field__label" id="htLabel">Hypertension</span>
+                    <div class="segmented" role="radiogroup" aria-labelledby="htLabel" aria-describedby="ht-help">
+                      <label><input type="radio" name="hypertension" value="1" /><span>Yes</span></label>
+                      <label><input type="radio" name="hypertension" value="0" /><span>No</span></label>
+                    </div>
+                    <p class="field__help" id="ht-help">Diagnosed high blood pressure.</p>
+                    <p class="field__error" id="hypertension-error" aria-live="polite"></p>
+                  </div>
+                  <div class="field" data-field="heart_disease">
+                    <span class="field__label" id="hdLabel">Heart disease</span>
+                    <div class="segmented" role="radiogroup" aria-labelledby="hdLabel" aria-describedby="hd-help">
+                      <label><input type="radio" name="heart_disease" value="1" /><span>Yes</span></label>
+                      <label><input type="radio" name="heart_disease" value="0" /><span>No</span></label>
+                    </div>
+                    <p class="field__help" id="hd-help">Any diagnosed heart condition.</p>
+                    <p class="field__error" id="heart_disease-error" aria-live="polite"></p>
+                  </div>
+                </div>
+                <div class="field" data-field="smoking_history">
+                  <label class="field__label" for="smoking_history">Smoking history</label>
+                  <div class="select">
+                    <select id="smoking_history" name="smoking_history" aria-describedby="smoke-help smoking_history-error">
+                      <option value="" selected disabled>Select smoking history</option>
+                      <option value="never">Never</option>
+                      <option value="former">Former</option>
+                      <option value="current">Current</option>
+                      <option value="ever">Ever</option>
+                      <option value="not current">Not current</option>
+                      <option value="No Info">No info</option>
+                    </select>
+                    <i data-lucide="chevron-down"></i>
+                  </div>
+                  <p class="field__help" id="smoke-help">Choose “No info” if unknown.</p>
+                  <p class="field__error" id="smoking_history-error" aria-live="polite"></p>
+                </div>
+              </fieldset>
+
+              <!-- Health measurements -->
+              <fieldset class="form-group">
+                <legend class="form-group__title"><span class="form-group__num">03</span>Health measurements</legend>
+                <div class="form-row form-row--3">
+                  <div class="field" data-field="bmi">
+                    <label class="field__label" for="bmi">BMI</label>
+                    <div class="input-unit">
+                      <input
+                        type="number"
+                        id="bmi"
+                        name="bmi"
+                        inputmode="decimal"
+                        min="0"
+                        max="100"
+                        step="any"
+                        placeholder="e.g. 27.3"
+                        aria-describedby="bmi-help bmi-error"
+                      />
+                      <span class="input-unit__unit">kg/m²</span>
+                    </div>
+                    <p class="field__help" id="bmi-help">Body Mass Index, above 0 up to 100.</p>
+                    <p class="field__error" id="bmi-error" aria-live="polite"></p>
+                  </div>
+                  <div class="field" data-field="HbA1c_level">
+                    <label class="field__label" for="HbA1c_level">HbA1c level</label>
+                    <div class="input-unit">
+                      <input
+                        type="number"
+                        id="HbA1c_level"
+                        name="HbA1c_level"
+                        inputmode="decimal"
+                        min="0"
+                        max="20"
+                        step="any"
+                        placeholder="e.g. 5.8"
+                        aria-describedby="hba-help HbA1c_level-error"
+                      />
+                      <span class="input-unit__unit">%</span>
+                    </div>
+                    <p class="field__help" id="hba-help">Average blood sugar over ~3 months. Up to 20.</p>
+                    <p class="field__error" id="HbA1c_level-error" aria-live="polite"></p>
+                  </div>
+                  <div class="field" data-field="blood_glucose_level">
+                    <label class="field__label" for="blood_glucose_level">Blood glucose</label>
+                    <div class="input-unit">
+                      <input
+                        type="number"
+                        id="blood_glucose_level"
+                        name="blood_glucose_level"
+                        inputmode="decimal"
+                        min="0"
+                        max="600"
+                        step="any"
+                        placeholder="e.g. 140"
+                        aria-describedby="bg-help blood_glucose_level-error"
+                      />
+                      <span class="input-unit__unit">mg/dL</span>
+                    </div>
+                    <p class="field__help" id="bg-help">Current blood glucose reading. Up to 600.</p>
+                    <p class="field__error" id="blood_glucose_level-error" aria-live="polite"></p>
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="form__footer">
+                <p class="form__progress" id="formProgress" aria-live="polite">0 of 8 fields completed</p>
+                <div class="form__actions">
+                  <button type="reset" class="btn btn--ghost" id="resetBtn">
+                    <i data-lucide="rotate-ccw"></i> Reset Form
+                  </button>
+                  <button type="submit" class="btn btn--primary" id="submitBtn">
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="btn__label">Predict Diabetes Risk</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <aside class="assess-aside">
+              <div class="card card--flat">
+                <h3 class="aside-title"><i data-lucide="shield-check"></i> Privacy</h3>
+                <p>
+                  Your inputs are sent directly to the prediction API over HTTPS. Nothing is saved to a database, and no
+                  analytics or third-party trackers are used.
+                </p>
+              </div>
+              <div class="card card--flat">
+                <h3 class="aside-title"><i data-lucide="timer"></i> First request may be slow</h3>
+                <p>
+                  The model is hosted on a free server that sleeps when idle. The first prediction can take up to a
+                  minute while it wakes up.
+                </p>
+              </div>
+              <div class="card card--flat">
+                <h3 class="aside-title"><i data-lucide="flask-conical"></i> Where to find values</h3>
+                <p>HbA1c and blood glucose come from a recent blood test. BMI = weight (kg) ÷ height (m)².</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= RESULTS ================= -->
+      <section class="section" id="results" aria-labelledby="resultsTitle">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Step 2</p>
+            <h2 id="resultsTitle">Prediction results</h2>
+            <p>Results are generated by the deployed model. The frontend displays them as returned.</p>
+          </div>
+
+          <div id="resultsMount" aria-live="polite">
+            <!-- Empty state -->
+            <div class="card empty" id="resultsEmpty">
+              <span class="empty__icon"><i data-lucide="clipboard-list"></i></span>
+              <h3>No assessment yet</h3>
+              <p>Complete the health assessment above to see your prediction here.</p>
+              <a href="#assessment" class="btn btn--ghost">Go to assessment</a>
+            </div>
+
+            <!-- Loading skeleton -->
+            <div class="card result skeleton-wrap" id="resultsLoading" hidden>
+              <div class="result__main">
+                <div class="skeleton skeleton--circle"></div>
+                <div class="skeleton-lines">
+                  <div class="skeleton skeleton--line w-40"></div>
+                  <div class="skeleton skeleton--line w-70"></div>
+                  <div class="skeleton skeleton--line w-55"></div>
+                </div>
+              </div>
+              <p class="loading-msg" id="loadingMsg">Analyzing your health indicators…</p>
+            </div>
+
+            <!-- Error state -->
+            <div class="card empty empty--error" id="resultsError" hidden>
+              <span class="empty__icon"><i data-lucide="cloud-off"></i></span>
+              <h3 id="errorTitle">Prediction unavailable</h3>
+              <p id="errorText">We couldn’t reach the prediction service.</p>
+              <button type="button" class="btn btn--primary" id="retryBtn"><i data-lucide="refresh-cw"></i> Try again</button>
+            </div>
+
+            <!-- Result (populated by script.js) -->
+            <article class="card result" id="resultCard" hidden>
+              <header class="result__head">
+                <div>
+                  <p class="result__kicker">Assessment result</p>
+                  <p class="result__time" id="resultTime"></p>
+                </div>
+                <div class="result__tools no-print">
+                  <button type="button" class="btn btn--ghost btn--sm" id="printBtn">
+                    <i data-lucide="printer"></i> Print
+                  </button>
+                  <button type="button" class="btn btn--primary btn--sm" id="newAssessmentBtn">
+                    <i data-lucide="plus"></i> New assessment
+                  </button>
+                </div>
+              </header>
+
+              <div class="result__main">
+                <div class="gauge" id="gauge">
+                  <svg viewBox="0 0 200 120" aria-hidden="true">
+                    <path class="gauge__track" d="M20 100 A80 80 0 0 1 180 100" pathLength="100" />
+                    <path class="gauge__fill" id="gaugeFill" d="M20 100 A80 80 0 0 1 180 100" pathLength="100" />
+                    <line class="gauge__tick" id="gaugeTick" x1="0" y1="0" x2="0" y2="0" />
+                  </svg>
+                  <div class="gauge__value">
+                    <span class="gauge__num" id="probValue">–</span>
+                    <span class="gauge__cap">probability</span>
+                  </div>
+                  <p class="gauge__legend"><span class="gauge__legend-tick"></span>Threshold <span id="thresholdLegend">–</span></p>
+                </div>
+
+                <div class="result__summary">
+                  <span class="badge" id="resultBadge"><i data-lucide="circle"></i><span></span></span>
+                  <h3 class="result__title" id="resultTitle"></h3>
+                  <p class="result__explain" id="resultExplain"></p>
+                  <dl class="result__meta">
+                    <div><dt>Prediction</dt><dd id="metaPrediction"></dd></div>
+                    <div><dt>Probability</dt><dd id="metaProbability"></dd></div>
+                    <div><dt>Threshold</dt><dd id="metaThreshold"></dd></div>
+                    <div><dt>Model</dt><dd id="metaModel"></dd></div>
+                  </dl>
+                </div>
+              </div>
+
+              <div class="result__params">
+                <h4>Submitted parameters</h4>
+                <dl class="params" id="paramsList"></dl>
+              </div>
+
+              <p class="result__disclaimer"><i data-lucide="alert-circle"></i><span id="resultDisclaimer"></span></p>
+            </article>
+          </div>
+
+          <!-- Session history -->
+          <div class="history no-print">
+            <div class="history__head">
+              <h3>Session history</h3>
+              <button type="button" class="link-btn" id="clearHistoryBtn" hidden>Clear</button>
+            </div>
+            <p class="history__note">Kept in memory only for this tab. Cleared when you refresh or close the page.</p>
+            <div id="historyList" class="history__list">
+              <p class="history__empty">Previous assessments from this session will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODEL ================= -->
+      <section class="section section--tint" id="model" aria-labelledby="modelTitle">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">How it works</p>
+            <h2 id="modelTitle">About the model</h2>
+            <p>A transparent overview of the machine learning system behind each prediction.</p>
+          </div>
+
+          <div class="model-grid">
+            <div class="card spec">
+              <div class="spec__item">
+                <span class="spec__label">Algorithm</span>
+                <span class="spec__value">Gradient Boosting Classifier</span>
+              </div>
+              <div class="spec__item">
+                <span class="spec__label">Classification threshold</span>
+                <span class="spec__value mono">0.21</span>
+              </div>
+              <div class="spec__item">
+                <span class="spec__label">Input features</span>
+                <span class="spec__value mono">8</span>
+              </div>
+              <div class="spec__item">
+                <span class="spec__label">Explainability</span>
+                <span class="spec__value">SHAP values</span>
+              </div>
+              <p class="spec__note">
+                The threshold is set to <strong>0.21</strong> instead of the default 0.50, so the model flags a case as
+                positive when the estimated probability is 21% or higher. This favours catching more potential cases
+                (higher recall) for screening. The classification is always made by the backend.
+              </p>
+              <div class="chips">
+                <span class="chip">Gender</span><span class="chip">Age</span><span class="chip">Hypertension</span
+                ><span class="chip">Heart disease</span><span class="chip">Smoking history</span
+                ><span class="chip">BMI</span><span class="chip">HbA1c level</span
+                ><span class="chip">Blood glucose</span>
+              </div>
+            </div>
+
+            <div class="card shap">
+              <h3 class="card-title">Most influential features</h3>
+              <p class="muted">Ranked by SHAP-based feature importance from the model analysis.</p>
+              <ol class="rank">
+                <li><span class="rank__n">1</span><span class="rank__name">HbA1c level</span><span class="rank__bar" style="--w: 100%"></span></li>
+                <li><span class="rank__n">2</span><span class="rank__name">Blood glucose level</span><span class="rank__bar" style="--w: 75%"></span></li>
+                <li><span class="rank__n">3</span><span class="rank__name">Age</span><span class="rank__bar" style="--w: 50%"></span></li>
+                <li><span class="rank__n">4</span><span class="rank__name">BMI</span><span class="rank__bar" style="--w: 25%"></span></li>
+              </ol>
+              <p class="shap__note">
+                <i data-lucide="info"></i>
+                Bars show rank order only. These are model-specific importance findings and do not prove medical
+                causation.
+              </p>
+            </div>
+          </div>
+
+          <div class="workflow">
+            <h3 class="card-title">Prediction workflow</h3>
+            <ol class="steps">
+              <li class="step">
+                <span class="step__icon"><i data-lucide="file-input"></i></span>
+                <h4>Input</h4>
+                <p>You enter eight health indicators in the form.</p>
+              </li>
+              <li class="step">
+                <span class="step__icon"><i data-lucide="shield-check"></i></span>
+                <h4>Validate</h4>
+                <p>Values are checked in the browser and again by the API.</p>
+              </li>
+              <li class="step">
+                <span class="step__icon"><i data-lucide="cpu"></i></span>
+                <h4>Predict</h4>
+                <p>The Gradient Boosting model estimates a probability.</p>
+              </li>
+              <li class="step">
+                <span class="step__icon"><i data-lucide="git-compare"></i></span>
+                <h4>Classify</h4>
+                <p>The backend compares it with the 0.21 threshold.</p>
+              </li>
+              <li class="step">
+                <span class="step__icon"><i data-lucide="bar-chart-3"></i></span>
+                <h4>Report</h4>
+                <p>The probability and classification are shown to you.</p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__grid">
+          <div>
+            <a href="#top" class="brand">
+              <span class="brand__mark" aria-hidden="true"><i data-lucide="droplet"></i></span>
+              <span class="brand__name">GlycoSense</span>
+            </a>
+            <p class="footer__about">
+              Diabetes Prediction System — an educational project that applies a Gradient Boosting Classifier to eight
+              health indicators to estimate the likelihood of diabetes, with SHAP-based explainability.
+            </p>
+          </div>
+          <div>
+            <h4 class="footer__h">Technology</h4>
+            <ul class="footer__list">
+              <li>HTML, CSS, JavaScript</li>
+              <li>FastAPI backend on Render</li>
+              <li>Scikit-learn Gradient Boosting</li>
+              <li>SHAP explainability</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="footer__h">Project</h4>
+            <ul class="footer__list">
+              <li>
+                <a href="https://github.com/Anubhavsingh311/Diabetes_prediction" target="_blank" rel="noopener noreferrer">
+                  <i data-lucide="github"></i> GitHub repository
+                </a>
+              </li>
+              <li>
+                <a href="https://diabetes-prediction-backend-api.onrender.com/docs" target="_blank" rel="noopener noreferrer">
+                  <i data-lucide="book-open"></i> API documentation
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="disclaimer">
+          <i data-lucide="alert-triangle"></i>
+          <p>
+            <strong>Medical disclaimer.</strong> This tool is developed for educational and research purposes. Its
+            predictions are generated by a machine learning model and are not a substitute for professional medical
+            advice, diagnosis, or treatment. Consult a qualified healthcare professional for medical decisions.
+          </p>
+        </div>
+        <p class="footer__copy">© <span id="year"></span> Diabetes Prediction System</p>
+      </div>
+    </footer>
+
+    <!-- Toasts -->
+    <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+    <script src="./script.js" defer></script>
+    <!-- figma:body-end -->
+  </body>
+</html>
